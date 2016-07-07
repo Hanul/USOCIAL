@@ -6,7 +6,6 @@ USOCIAL.TWITTER_REQUEST_TOKEN = METHOD({
 
 		UOAUTH.GET_TOKEN({
 			url : 'https://api.twitter.com/oauth/request_token',
-			method : 'POST',
 			consumerKey : NODE_CONFIG.USOCIAL.Twitter.consumerKey,
 			consumerSecret : NODE_CONFIG.USOCIAL.Twitter.consumerSecret
 		}, function(data) {
