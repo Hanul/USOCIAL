@@ -30,7 +30,7 @@ USOCIAL.INSTAGRAM_ACCESS_TOKEN = METHOD({
 			headers: {
 				'Content-Type' : 'application/x-www-form-urlencoded',
 				'Content-Length' : Buffer.byteLength(paramStr)
-	      }
+			}
 		}, function(dataStr) {
 			callback(PARSE_STR(dataStr));
 		});
