@@ -34,7 +34,14 @@ USOCIAL.FACEBOOK_GET_USER_DATA = METHOD({
 			uri : '/v2.7/' + (userId === undefined ? 'me' : userId),
 			paramStr: 'fields=' + fieldsStr + '&access_token=' + accessToken
 		}, function(content) {
-			callback(PARSE_STR(content).data);
+			
+			var
+			// info
+			info = PARSE_STR(content);
+			
+			if (info !== undefined) {
+				callback(info.data);
+			}
 		});
 	}
 });
