@@ -17,8 +17,8 @@ USOCIAL.INSTAGRAM_GET_USER_DATA = METHOD({
 		if (CHECK_IS_DATA(accessTokenOrParams) !== true) {
 			accessToken = accessTokenOrParams;
 		} else {
-			userId = params.userId;
-			accessToken = params.accessToken;
+			userId = accessTokenOrParams.userId;
+			accessToken = accessTokenOrParams.accessToken;
 		}
 		
 		GET({

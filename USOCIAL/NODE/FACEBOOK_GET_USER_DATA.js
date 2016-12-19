@@ -36,11 +36,11 @@ USOCIAL.FACEBOOK_GET_USER_DATA = METHOD({
 		}, function(content) {
 			
 			var
-			// info
-			info = PARSE_STR(content);
+			// data
+			data = PARSE_STR(content);
 			
-			if (info !== undefined) {
-				callback(info.data);
+			if (data !== undefined) {
+				callback(data);
 			}
 		});
 	}
