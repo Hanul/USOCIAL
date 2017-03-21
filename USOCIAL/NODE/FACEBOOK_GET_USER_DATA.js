@@ -1,27 +1,22 @@
+/*
+ * 페이스북 유저 데이터를 가져옵니다.
+ */
 USOCIAL.FACEBOOK_GET_USER_DATA = METHOD({
 
-	run : function(params, callback) {
-		'use strict';
+	run : (params, callback) => {
 		//REQUIRED: params
 		//OPTIONAL: params.userId
 		//REQUIRED: params.fields
 		//REQUIRED: params.accessToken
 		//REQUIRED: callback
 
-		var
-		// user id
-		userId = params.userId,
+		let userId = params.userId;
+		let fields = params.fields;
+		let accessToken = params.accessToken;
 		
-		// fields
-		fields = params.fields,
+		let fieldsStr = '';
 		
-		// access token
-		accessToken = params.accessToken,
-		
-		// fields str
-		fieldsStr = '';
-		
-		EACH(fields, function(field, i) {
+		EACH(fields, (field, i) => {
 			if (i > 0) {
 				fieldsStr += ',';
 			}
@@ -33,11 +28,9 @@ USOCIAL.FACEBOOK_GET_USER_DATA = METHOD({
 			host : 'graph.facebook.com',
 			uri : '/v2.7/' + (userId === undefined ? 'me' : userId),
 			paramStr: 'fields=' + fieldsStr + '&access_token=' + accessToken
-		}, function(content) {
+		}, (content) => {
 			
-			var
-			// data
-			data = PARSE_STR(content);
+			let data = PARSE_STR(content);
 			
 			if (data !== undefined) {
 				callback(data);

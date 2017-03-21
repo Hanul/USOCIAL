@@ -1,46 +1,55 @@
 USOCIAL_SAMPLE.MAIN = METHOD({
 
-	run : function(addRequestHandler) {
-		'use strict';
+	run : (addRequestHandler) => {
 		
-		addRequestHandler(function(requestInfo, response) {
-
-			var
-			// uri
-			uri = requestInfo.uri,
+		USOCIAL_SAMPLE.ROOM('oauthRoom', (clientInfo, on, off) => {
 			
-			// params
-			params = requestInfo.params;
-			
-			if (uri === '__TWITTER_REQUEST_TOKEN') {
+			on('accessFacebookToken', (params, ret) => {
 				
-				USOCIAL.TWITTER_REQUEST_TOKEN(function(token) {
-					response(token);
+				if (params !== undefined) {
+				
+					USOCIAL.FACEBOOK_ACCESS_TOKEN({
+						redirectURI : params.oauthToken,
+						code : params.oauthVerifier
+					}, (data) => {
+						ret(data);
+					});
+				}
+			});
+			
+			on('requestTwitterToken', (notUsing, ret) => {
+				
+				USOCIAL.TWITTER_REQUEST_TOKEN((token) => {
+					ret(token);
 				});
-				
-				return false;
-			}
+			});
 			
-			else if (uri === '__TWITTER_ACCESS_TOKEN') {
+			on('accessTwitterToken', (params, ret) => {
 				
-				USOCIAL.TWITTER_ACCESS_TOKEN(params, function(data) {
-					response(STRINGIFY(data));
-				});
+				if (params !== undefined) {
 				
-				return false;
-			}
+					USOCIAL.TWITTER_ACCESS_TOKEN({
+						token : params.oauthToken,
+						verifier : params.oauthVerifier
+					}, (data) => {
+						ret(data);
+					});
+				}
+			});
 			
-			else if (uri === '__TWITTER_LOGIN_CALLBACK') {
+			on('getTwitterUserData', (tokenInfo, ret) => {
 				
-				response({
-					statusCode : 302,
-					headers : {
-						'Location' : NODE_CONFIG.USOCIAL.Twitter.loginCallbackURL + '?token=' + encodeURIComponent(params.oauth_token) + '&verifier=' + encodeURIComponent(params.oauth_verifier)
-					}
-				});
-				
-				return false;
-			}
+				if (tokenInfo !== undefined) {
+					
+					USOCIAL.TWITTER_GET_USER_DATA({
+						userId : tokenInfo.user_id,
+						token : tokenInfo.oauth_token,
+						tokenSecret : tokenInfo.oauth_token_secret
+					}, (userData) => {
+						ret(userData);
+					});
+				}
+			});
 		});
 	}
 });

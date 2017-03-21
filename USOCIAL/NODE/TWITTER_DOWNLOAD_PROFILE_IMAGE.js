@@ -1,65 +1,44 @@
 /**
- * download HTTP resource.
+ * 트위터 프로필 이미지를 다운로드합니다.
  */
-USOCIAL.TWITTER_DOWNLOAD_PROFILE_IMAGE = METHOD(function() {
-	'use strict';
+USOCIAL.TWITTER_DOWNLOAD_PROFILE_IMAGE = METHOD(() => {
 
-	var
-	//IMPORT: HTTP
-	HTTP = require('http'),
-	
-	//IMPORT: URL
-	URL = require('url');
+	let HTTP = require('http');
+	let URL = require('url');
 
 	return {
 
-		run : function(params, callbackOrHandlers) {
+		run : (params, callbackOrHandlers) => {
 			//REQUIRED: params
 			//REQUIRED: params.url
 			//REQUIRED: params.path
 			//OPTIONAL: callbackOrHandlers
-			//OPTIONAL: callbackOrHandlers.success
 			//OPTIONAL: callbackOrHandlers.error
+			//OPTIONAL: callbackOrHandlers.success
 
-			var
-			// url
-			url = params.url,
+			let url = params.url;
+			let path = params.path;
+			let urlData = URL.parse(url);
 			
-			// path
-			path = params.path,
+			let errorHandler;
+			let callback;
 			
-			// url data
-			urlData = URL.parse(url),
-			
-			// callback.
-			callback,
-
-			// error handler.
-			errorHandler,
-
-			// http request
-			req;
-
 			if (callbackOrHandlers !== undefined) {
 				if (CHECK_IS_DATA(callbackOrHandlers) !== true) {
 					callback = callbackOrHandlers;
 				} else {
-					callback = callbackOrHandlers.success;
 					errorHandler = callbackOrHandlers.error;
+					callback = callbackOrHandlers.success;
 				}
 			}
 			
-			req = HTTP.get({
+			let req = HTTP.get({
 				hostname : urlData.hostname === TO_DELETE ? undefined : urlData.hostname,
 				path : urlData.pathname === TO_DELETE ? undefined : urlData.pathname,
 				agent : new HTTP.Agent({
 					keepAlive : true
 				})
-			}, function(httpResponse) {
-				
-				var
-				// data
-				data;
+			}, (httpResponse) => {
 				
 				// redirect.
 				if (httpResponse.statusCode === 301 || httpResponse.statusCode === 302) {
@@ -76,12 +55,12 @@ USOCIAL.TWITTER_DOWNLOAD_PROFILE_IMAGE = METHOD(function() {
 					
 				} else {
 				
-					data = [];
+					let data = [];
 	
-					httpResponse.on('data', function(chunk) {
+					httpResponse.on('data', (chunk) => {
 						data.push(chunk);
 					});
-					httpResponse.on('end', function() {
+					httpResponse.on('end', () => {
 						
 						WRITE_FILE({
 							path : path,
@@ -94,16 +73,14 @@ USOCIAL.TWITTER_DOWNLOAD_PROFILE_IMAGE = METHOD(function() {
 				}
 			});
 
-			req.on('error', function(error) {
+			req.on('error', (error) => {
 
-				var
-				// error msg
-				errorMsg = error.toString();
+				let errorMsg = error.toString();
 
 				if (errorHandler !== undefined) {
 					errorHandler(errorMsg);
 				} else {
-					SHOW_ERROR('[USOCIAL] TWITTER_DOWNLOAD_PROFILE_IMAGE FAILED: ' + errorMsg, params);
+					SHOW_ERROR('USOCIAL', 'TWITTER_DOWNLOAD_PROFILE_IMAGE FAILED: ' + errorMsg, params);
 				}
 			});
 		}

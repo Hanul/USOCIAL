@@ -1,18 +1,16 @@
-USOCIAL.FACEBOOK_GET_USER_DATA = METHOD({
+/*
+ * 페이스북 친구 목록을 가져옵니다.
+ */
+USOCIAL.FACEBOOK_GET_FRIENDS = METHOD({
 
-	run : function(accessTokenOrParams, callback) {
-		'use strict';
+	run : (accessTokenOrParams, callback) => {
 		//REQUIRED: accessTokenOrParams
 		//OPTIONAL: accessTokenOrParams.userId
 		//REQUIRED: accessTokenOrParams.accessToken
 		//REQUIRED: callback
 
-		var
-		// user id
-		userId,
-		
-		// access token
-		accessToken;
+		let userId;
+		let accessToken;
 		
 		if (CHECK_IS_DATA(accessTokenOrParams) !== true) {
 			accessToken = accessTokenOrParams;
@@ -26,11 +24,9 @@ USOCIAL.FACEBOOK_GET_USER_DATA = METHOD({
 			host : 'graph.facebook.com',
 			uri : '/v2.7/' + (userId === undefined ? 'me' : userId) + '/friends',
 			paramStr: 'access_token=' + accessToken
-		}, function(content) {
+		}, (content) => {
 			
-			var
-			// info
-			info = PARSE_STR(content);
+			let info = PARSE_STR(content);
 			
 			if (info !== undefined) {
 				callback(info.data);

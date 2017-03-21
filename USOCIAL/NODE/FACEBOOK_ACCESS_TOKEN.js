@@ -1,21 +1,18 @@
+/*
+ * 코드를 이용해 페이스북 서비스에 인증합니다.
+ */
 USOCIAL.FACEBOOK_ACCESS_TOKEN = METHOD({
 
-	run : function(params, callback) {
-		'use strict';
+	run : (params, callback) => {
 		//REQUIRED: params
 		//REQUIRED: params.redirectURI
 		//REQUIRED: params.code
 		//REQUIRED: callback
 		
-		var
-		// redirect uri
-		redirectURI = params.redirectURI,
+		let redirectURI = params.redirectURI;
+		let code = params.code;
 		
-		// code
-		code = params.code,
-		
-		// param str
-		paramStr;
+		let paramStr;
 		
 		GET({
 			isSecure : true,
@@ -26,7 +23,7 @@ USOCIAL.FACEBOOK_ACCESS_TOKEN = METHOD({
 				'&redirect_uri=' + encodeURIComponent(redirectURI) +
 				'&client_secret=' + encodeURIComponent(NODE_CONFIG.USOCIAL.Facebook.clientSecret) +
 				'&code=' + encodeURIComponent(code)
-		}, function(dataStr) {
+		}, (dataStr) => {
 			callback(PARSE_STR(dataStr));
 		});
 	}

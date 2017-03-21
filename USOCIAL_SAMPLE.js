@@ -1,4 +1,4 @@
-require(process.env.UPPERCASE_PATH + '/BOOT.js');
+require(process.env.UPPERCASE_PATH + '/LOAD.js');
 
 BOOT({
 	CONFIG : {
@@ -11,6 +11,13 @@ BOOT({
 		isNotUsingCPUClustering : true,
 		
 		USOCIAL : {
+		
+			Facebook : {
+				clientId : '219122708253100',
+				clientSecret : '454a794b85bfe031da0af3a494fb9c3e',
+				loginCallbackURL : 'usocial://test'
+			},
+			
 			Twitter : {
 				consumerKey : 'S3BHgVoKD6eTHXrzzbKw5ztUr',
 				consumerSecret : '9fXxULfpROHWGTrbyL6CjuL1RFdvPi38xqbOr8gaMG0GsvZXqp',

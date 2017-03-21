@@ -1,22 +1,18 @@
+/*
+ * 트위터 유저 데이터를 가져옵니다.
+ */
 USOCIAL.TWITTER_GET_USER_DATA = METHOD({
 
-	run : function(params, callback) {
-		'use strict';
+	run : (params, callback) => {
 		//REQUIRED: params
 		//REQUIRED: params.userId
 		//OPTIONAL: params.token
 		//OPTIONAL: params.tokenSecret
 		//REQUIRED: callback
 
-		var
-		// user id
-		userId = params.userId,
-
-		// token
-		token = params.token,
-
-		// token secret
-		tokenSecret = params.tokenSecret;
+		let userId = params.userId;
+		let token = params.token;
+		let tokenSecret = params.tokenSecret;
 		
 		GET({
 			isSecure : true,
@@ -24,7 +20,7 @@ USOCIAL.TWITTER_GET_USER_DATA = METHOD({
 			uri : '1.1/users/show.json',
 			paramStr : 'user_id=' + userId,
 			headers : {
-				Authorization : UOAUTH.GENERATE_AUTHORIZATION({
+				Authorization : USOCIAL.TWITTER_GENERATE_AUTHORIZATION({
 					url : 'https://api.twitter.com/1.1/users/show.json',
 					method : 'GET',
 					paramStr : 'user_id=' + userId,
@@ -34,7 +30,7 @@ USOCIAL.TWITTER_GET_USER_DATA = METHOD({
 					tokenSecret : tokenSecret
 				})
 			}
-		}, function(content) {
+		}, (content) => {
 			callback(PARSE_STR(content));
 		});
 	}

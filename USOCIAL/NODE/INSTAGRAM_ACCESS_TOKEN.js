@@ -1,21 +1,18 @@
+/*
+ * 코드를 이용해 인스타그램 서비스에 인증합니다.
+ */
 USOCIAL.INSTAGRAM_ACCESS_TOKEN = METHOD({
 
-	run : function(params, callback) {
-		'use strict';
+	run : (params, callback) => {
 		//REQUIRED: params
 		//REQUIRED: params.redirectURI
 		//REQUIRED: params.code
 		//REQUIRED: callback
 		
-		var
-		// redirect uri
-		redirectURI = params.redirectURI,
+		let redirectURI = params.redirectURI;
+		let code = params.code;
 		
-		// code
-		code = params.code,
-		
-		// param str
-		paramStr;
+		let paramStr;
 		
 		POST({
 			isSecure : true,
@@ -31,7 +28,7 @@ USOCIAL.INSTAGRAM_ACCESS_TOKEN = METHOD({
 				'Content-Type' : 'application/x-www-form-urlencoded',
 				'Content-Length' : Buffer.byteLength(paramStr)
 			}
-		}, function(dataStr) {
+		}, (dataStr) => {
 			callback(PARSE_STR(dataStr));
 		});
 	}
