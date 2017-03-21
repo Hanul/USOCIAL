@@ -80,7 +80,7 @@ USOCIAL.TWITTER_DOWNLOAD_PROFILE_IMAGE = METHOD(() => {
 				if (errorHandler !== undefined) {
 					errorHandler(errorMsg);
 				} else {
-					SHOW_ERROR('USOCIAL', 'TWITTER_DOWNLOAD_PROFILE_IMAGE FAILED: ' + errorMsg, params);
+					USOCIAL.SHOW_ERROR('TWITTER_DOWNLOAD_PROFILE_IMAGE', 'FAILED: ' + errorMsg, params);
 				}
 			});
 		}
