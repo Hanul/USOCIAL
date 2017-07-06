@@ -3,11 +3,13 @@
  */
 USOCIAL.FACEBOOK_GET_FRIENDS = METHOD({
 
-	run : (accessTokenOrParams, callback) => {
+	run : (accessTokenOrParams, callbackOrHandlers) => {
 		//REQUIRED: accessTokenOrParams
 		//OPTIONAL: accessTokenOrParams.userId
 		//REQUIRED: accessTokenOrParams.accessToken
-		//REQUIRED: callback
+		//REQUIRED: callbackOrHandlers
+		//OPTIONAL: callbackOrHandlers.error
+		//REQUIRED: callbackOrHandlers.success
 
 		let userId;
 		let accessToken;
@@ -19,17 +21,30 @@ USOCIAL.FACEBOOK_GET_FRIENDS = METHOD({
 			accessToken = params.accessToken;
 		}
 		
+		let errorHandler;
+		let callback;
+		
+		if (CHECK_IS_DATA(callbackOrHandlers) !== true) {
+			callback = callbackOrHandlers;
+		} else {
+			errorHandler = callbackOrHandlers.error;
+			callback = callbackOrHandlers.success;
+		}
+		
 		GET({
 			isSecure : true,
 			host : 'graph.facebook.com',
 			uri : '/v2.7/' + (userId === undefined ? 'me' : userId) + '/friends',
 			paramStr: 'access_token=' + accessToken
-		}, (content) => {
-			
-			let info = PARSE_STR(content);
-			
-			if (info !== undefined) {
-				callback(info.data);
+		}, {
+			error : errorHandler,
+			success : (content) => {
+				
+				let info = PARSE_STR(content);
+				
+				if (info !== undefined) {
+					callback(info.data);
+				}
 			}
 		});
 	}

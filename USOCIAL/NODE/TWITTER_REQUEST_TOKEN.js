@@ -12,8 +12,20 @@ USOCIAL.TWITTER_REQUEST_TOKEN = METHOD((m) => {
 	
 	return {
 	
-		run : (callback) => {
-			//REQUIRED: callback
+		run : (callbackOrHandlers) => {
+			//REQUIRED: callbackOrHandlers
+			//OPTIONAL: callbackOrHandlers.error
+			//REQUIRED: callbackOrHandlers.success
+			
+			let errorHandler;
+			let callback;
+			
+			if (CHECK_IS_DATA(callbackOrHandlers) !== true) {
+				callback = callbackOrHandlers;
+			} else {
+				errorHandler = callbackOrHandlers.error;
+				callback = callbackOrHandlers.success;
+			}
 			
 			POST({
 				isSecure : true,
@@ -28,8 +40,11 @@ USOCIAL.TWITTER_REQUEST_TOKEN = METHOD((m) => {
 						consumerSecret : NODE_CONFIG.USOCIAL.Twitter.consumerSecret
 					})
 				}
-			}, (content) => {
-				callback(Querystring.parse(content).oauth_token);
+			}, {
+				error : errorHandler,
+				success : (content) => {
+					callback(Querystring.parse(content).oauth_token);
+				}
 			});
 		}
 	}

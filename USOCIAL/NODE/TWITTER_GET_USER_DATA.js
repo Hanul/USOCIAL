@@ -3,16 +3,28 @@
  */
 USOCIAL.TWITTER_GET_USER_DATA = METHOD({
 
-	run : (params, callback) => {
+	run : (params, callbackOrHandlers) => {
 		//REQUIRED: params
 		//REQUIRED: params.userId
 		//OPTIONAL: params.token
 		//OPTIONAL: params.tokenSecret
-		//REQUIRED: callback
+		//REQUIRED: callbackOrHandlers
+		//OPTIONAL: callbackOrHandlers.error
+		//REQUIRED: callbackOrHandlers.success
 
 		let userId = params.userId;
 		let token = params.token;
 		let tokenSecret = params.tokenSecret;
+		
+		let errorHandler;
+		let callback;
+		
+		if (CHECK_IS_DATA(callbackOrHandlers) !== true) {
+			callback = callbackOrHandlers;
+		} else {
+			errorHandler = callbackOrHandlers.error;
+			callback = callbackOrHandlers.success;
+		}
 		
 		GET({
 			isSecure : true,
@@ -30,8 +42,11 @@ USOCIAL.TWITTER_GET_USER_DATA = METHOD({
 					tokenSecret : tokenSecret
 				})
 			}
-		}, (content) => {
-			callback(PARSE_STR(content));
+		}, {
+			error : errorHandler,
+			success : (content) => {
+				callback(PARSE_STR(content));
+			}
 		});
 	}
 });

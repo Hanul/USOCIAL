@@ -3,14 +3,26 @@
  */
 USOCIAL.INSTAGRAM_ACCESS_TOKEN = METHOD({
 
-	run : (params, callback) => {
+	run : (params, callbackOrHandlers) => {
 		//REQUIRED: params
 		//REQUIRED: params.redirectURI
 		//REQUIRED: params.code
-		//REQUIRED: callback
+		//REQUIRED: callbackOrHandlers
+		//OPTIONAL: callbackOrHandlers.error
+		//REQUIRED: callbackOrHandlers.success
 		
 		let redirectURI = params.redirectURI;
 		let code = params.code;
+		
+		let errorHandler;
+		let callback;
+		
+		if (CHECK_IS_DATA(callbackOrHandlers) !== true) {
+			callback = callbackOrHandlers;
+		} else {
+			errorHandler = callbackOrHandlers.error;
+			callback = callbackOrHandlers.success;
+		}
 		
 		let paramStr;
 		
@@ -28,8 +40,11 @@ USOCIAL.INSTAGRAM_ACCESS_TOKEN = METHOD({
 				'Content-Type' : 'application/x-www-form-urlencoded',
 				'Content-Length' : Buffer.byteLength(paramStr)
 			}
-		}, (dataStr) => {
-			callback(PARSE_STR(dataStr));
+		}, {
+			error : errorHandler,
+			success : (dataStr) => {
+				callback(PARSE_STR(dataStr));
+			}
 		});
 	}
 });

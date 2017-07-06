@@ -12,14 +12,26 @@ USOCIAL.TWITTER_ACCESS_TOKEN = METHOD((m) => {
 	
 	return {
 	
-		run : (params, callback) => {
+		run : (params, callbackOrHandlers) => {
 			//REQUIRED: params
 			//REQUIRED: params.token
 			//OPTIONAL: params.verifier
-			//REQUIRED: callback
+			//REQUIRED: callbackOrHandlers
+			//OPTIONAL: callbackOrHandlers.error
+			//REQUIRED: callbackOrHandlers.success
 	
 			let token = params.token;
 			let verifier = params.verifier;
+			
+			let errorHandler;
+			let callback;
+			
+			if (CHECK_IS_DATA(callbackOrHandlers) !== true) {
+				callback = callbackOrHandlers;
+			} else {
+				errorHandler = callbackOrHandlers.error;
+				callback = callbackOrHandlers.success;
+			}
 			
 			POST({
 				isSecure : true,
@@ -36,8 +48,11 @@ USOCIAL.TWITTER_ACCESS_TOKEN = METHOD((m) => {
 						verifier : verifier
 					})
 				}
-			}, (content) => {
-				callback(Querystring.parse(content));
+			}, {
+				error : errorHandler,
+				success : (content) => {
+					callback(Querystring.parse(content));
+				}
 			});
 		}
 	};
