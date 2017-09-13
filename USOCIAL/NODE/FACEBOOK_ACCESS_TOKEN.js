@@ -29,7 +29,7 @@ USOCIAL.FACEBOOK_ACCESS_TOKEN = METHOD({
 		GET({
 			isSecure : true,
 			host : 'graph.facebook.com',
-			uri : 'v2.3/oauth/access_token',
+			uri : 'oauth/access_token',
 			paramStr : paramStr =
 				'client_id=' + encodeURIComponent(NODE_CONFIG.USOCIAL.Facebook.clientId) +
 				'&redirect_uri=' + encodeURIComponent(redirectURI) +

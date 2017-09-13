@@ -38,7 +38,7 @@ USOCIAL.FACEBOOK_GET_USER_DATA = METHOD({
 		GET({
 			isSecure : true,
 			host : 'graph.facebook.com',
-			uri : '/v2.7/' + (userId === undefined ? 'me' : userId),
+			uri : (userId === undefined ? 'me' : userId),
 			paramStr: 'fields=' + fieldsStr + '&access_token=' + accessToken
 		}, {
 			error : errorHandler,

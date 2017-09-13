@@ -34,7 +34,7 @@ USOCIAL.FACEBOOK_GET_FRIENDS = METHOD({
 		GET({
 			isSecure : true,
 			host : 'graph.facebook.com',
-			uri : '/v2.7/' + (userId === undefined ? 'me' : userId) + '/friends',
+			uri : (userId === undefined ? 'me' : userId) + '/friends',
 			paramStr: 'access_token=' + accessToken
 		}, {
 			error : errorHandler,
