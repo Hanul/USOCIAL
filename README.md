@@ -12,6 +12,7 @@
 - Facebook
 - Twitter
 - Instagram
+- Line
 
 ## API 문서
 [API](API/README.md)
