@@ -39,7 +39,10 @@ USOCIAL.FACEBOOK_GET_USER_DATA = METHOD({
 			isSecure : true,
 			host : 'graph.facebook.com',
 			uri : (userId === undefined ? 'me' : userId),
-			paramStr : 'fields=' + fieldsStr + '&access_token=' + accessToken
+			paramStr : 'fields=' + fieldsStr + '&access_token=' + accessToken + '&appsecret_proof=' + encodeURIComponent(SHA256({
+				password : accessToken,
+				key : NODE_CONFIG.USOCIAL.Facebook.clientSecret
+			}))
 		}, {
 			error : errorHandler,
 			success : (content) => {
